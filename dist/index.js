@@ -15,14 +15,18 @@ class server {
             instance.listen(port);
             apps.push({ port, instance });
         }
+        ;
     }
+    ;
     route(options) {
-        const { type, route, handler } = options;
-        const types = Array.isArray(type) ? type : [type];
-        types.forEach((type) => {
-            type = type.toLowerCase();
-            this.app[type](route, handler);
+        const { route, method, code } = options;
+        const types = Array.isArray(method) ? method : [method];
+        types.forEach((method) => {
+            method = method.toLowerCase();
+            this.app[method](route, code);
         });
     }
+    ;
 }
 exports.server = server;
+;
