@@ -5,9 +5,8 @@ type apps = {
     instance: Express
 }
 
-type HTTPMethodsCaps = "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS" | "TRACE" | "CONNECT";
-type HTTPMethodsLower = "get" | "put" | "post" | "delete" | "patch" | "head" | "options" | "trace" | "connect";
-type HTTPMethods = HTTPMethodsCaps | HTTPMethodsLower
+type RawHTTPMethods = "get" | "put" | "post" | "delete" | "patch" | "options" | "trace" | "connect"
+type HTTPMethods = Uppercase<RawHTTPMethods> | RawHTTPMethods
 
 type RouteOptions = {
     type: HTTPMethods | HTTPMethods[]
@@ -33,7 +32,7 @@ export class server {
         const { type, route, handler } = options;
         const types = Array.isArray(type) ? type : [type];
         types.forEach((type:HTTPMethods) => {
-            type = type.toLowerCase() as HTTPMethodsLower
+            type = type.toLowerCase() as RawHTTPMethods
             this.app[type](route, handler)
         });
     }
