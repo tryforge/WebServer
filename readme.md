@@ -9,17 +9,10 @@ npm i @tyrforge/express
 ```
 2. Create your first route
 ```js
-const { server } = require('@tryforge/express')
+const { app } = require('@tryforge/express')
 
-const app = new server(port)
-
-app.route({
-    route: '/', //or any path you want to use
-    method: HTTPMethods | HTTPMethods[], //http method(s) you want the endpoint to use
-    code: (req, res) => {
-        //route code goes here
-    }
-})
+const server = new app(port)
+//And from now on you can use anything that express uses!
 ```
 3. Have fun making your own forge extension that requires express
 
