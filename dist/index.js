@@ -5,15 +5,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = __importDefault(require("express"));
+const ws_1 = require("ws");
 const apps = [];
 class server {
     app;
+    ws;
     constructor(port) {
-        const instance = apps.find(s => s.port == port)?.instance ?? (0, express_1.default)();
+        const app = apps.find(s => s.port == port);
+        const instance = app?.instance ?? (0, express_1.default)();
+        const ws = app?.ws ?? new ws_1.WebSocketServer({ noServer: true });
         this.app = instance;
+        this.ws = ws;
         if (!apps.find(s => s.port == port)) {
-            instance.listen(port);
-            apps.push({ port, instance });
+            instance.listen(port).on('upgrade', (req, socket, head) => {
+                this.ws.handleUpgrade(req, socket, head, (ws) => {
+                    ws.emit('connection', ws, req);
+                });
+            });
+            apps.push({ port, instance, ws });
         }
         ;
     }
@@ -22,6 +31,6 @@ class server {
 ;
 function app(port) {
     const instance = new server(port);
-    return instance.app;
+    return { ...instance.app, ws: instance.ws };
 }
 exports.app = app;
