@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.server = void 0;
+exports.app = exports.server = void 0;
 const express_1 = __importDefault(require("express"));
 const apps = [];
 class server {
@@ -18,15 +18,11 @@ class server {
         ;
     }
     ;
-    route(options) {
-        const { route, method, code } = options;
-        const types = Array.isArray(method) ? method : [method];
-        types.forEach((method) => {
-            method = method.toLowerCase();
-            this.app[method](route, code);
-        });
-    }
-    ;
 }
 exports.server = server;
 ;
+function app(port) {
+    const instance = new server(port);
+    return instance.app;
+}
+exports.app = app;
