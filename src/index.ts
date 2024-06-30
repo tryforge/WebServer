@@ -7,7 +7,7 @@ type apps = {
 
 const apps: apps[] = [];
 
-export class server {
+class server {
     public app: Express;
 
     public constructor(port: number){
