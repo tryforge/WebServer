@@ -1,10 +1,10 @@
 {
-  "name": "@tryforge/express",
+  "name": "@tryforge/webserver",
   "version": "1.0.2",
   "main": "dist/index.js",
   "author": "aggelos007",
   "license": "ISC",
-  "description": "A light package using express to connect many HTTP Forge extensions",
+  "description": "A light package using express and ws to connect many HTTP Forge extensions",
   "dependencies": {
     "express": "^4.19.2",
     "ws": "^8.17.1"
