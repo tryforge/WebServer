@@ -1,85 +1,11 @@
-/// <reference types="qs" />
-/// <reference types="node" />
 import express from 'express';
 import { WebSocketServer } from 'ws';
-export declare function app(port: number): {
-    ws: WebSocketServer;
-    request: import("express-serve-static-core").Request<import("express-serve-static-core").ParamsDictionary, any, any, import("qs").ParsedQs, Record<string, any>>;
-    response: import("express-serve-static-core").Response<any, Record<string, any>, number>;
-    init(): void;
-    defaultConfiguration(): void;
-    engine(ext: string, fn: (path: string, options: object, callback: (e: any, rendered?: string | undefined) => void) => void): express.Express;
-    set(setting: string, val: any): express.Express;
-    get: ((name: string) => any) & import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    param(name: string | string[], handler: import("express-serve-static-core").RequestParamHandler): express.Express;
-    param(callback: (name: string, matcher: RegExp) => import("express-serve-static-core").RequestParamHandler): express.Express;
-    path(): string;
-    enabled(setting: string): boolean;
-    disabled(setting: string): boolean;
-    enable(setting: string): express.Express;
-    disable(setting: string): express.Express;
-    render(name: string, options?: object | undefined, callback?: ((err: Error, html: string) => void) | undefined): void;
-    render(name: string, callback: (err: Error, html: string) => void): void;
-    listen(port: number, hostname: string, backlog: number, callback?: (() => void) | undefined): import("http").Server<typeof import("http").IncomingMessage, typeof import("http").ServerResponse>;
-    listen(port: number, hostname: string, callback?: (() => void) | undefined): import("http").Server<typeof import("http").IncomingMessage, typeof import("http").ServerResponse>;
-    listen(port: number, callback?: (() => void) | undefined): import("http").Server<typeof import("http").IncomingMessage, typeof import("http").ServerResponse>;
-    listen(callback?: (() => void) | undefined): import("http").Server<typeof import("http").IncomingMessage, typeof import("http").ServerResponse>;
-    listen(path: string, callback?: (() => void) | undefined): import("http").Server<typeof import("http").IncomingMessage, typeof import("http").ServerResponse>;
-    listen(handle: any, listeningListener?: (() => void) | undefined): import("http").Server<typeof import("http").IncomingMessage, typeof import("http").ServerResponse>;
-    router: string;
-    settings: any;
-    resource: any;
-    map: any;
-    locals: Record<string, any> & import("express-serve-static-core").Locals;
-    routes: any;
-    _router: any;
-    use: import("express-serve-static-core").ApplicationRequestHandler<express.Express>;
-    on: (event: string, callback: (parent: import("express-serve-static-core").Application<Record<string, any>>) => void) => express.Express;
-    mountpath: string | string[];
-    addListener<K>(eventName: string | symbol, listener: (...args: any[]) => void): express.Express;
-    once<K_1>(eventName: string | symbol, listener: (...args: any[]) => void): express.Express;
-    removeListener<K_2>(eventName: string | symbol, listener: (...args: any[]) => void): express.Express;
-    off<K_3>(eventName: string | symbol, listener: (...args: any[]) => void): express.Express;
-    removeAllListeners(eventName?: string | symbol | undefined): express.Express;
-    setMaxListeners(n: number): express.Express;
-    getMaxListeners(): number;
-    listeners<K_4>(eventName: string | symbol): Function[];
-    rawListeners<K_5>(eventName: string | symbol): Function[];
-    emit<K_6>(eventName: string | symbol, ...args: any[]): boolean;
-    listenerCount<K_7>(eventName: string | symbol, listener?: Function | undefined): number;
-    prependListener<K_8>(eventName: string | symbol, listener: (...args: any[]) => void): express.Express;
-    prependOnceListener<K_9>(eventName: string | symbol, listener: (...args: any[]) => void): express.Express;
-    eventNames(): (string | symbol)[];
-    all: import("express-serve-static-core").IRouterMatcher<express.Express, "all">;
-    post: import("express-serve-static-core").IRouterMatcher<express.Express, "post">;
-    put: import("express-serve-static-core").IRouterMatcher<express.Express, "put">;
-    delete: import("express-serve-static-core").IRouterMatcher<express.Express, "delete">;
-    patch: import("express-serve-static-core").IRouterMatcher<express.Express, "patch">;
-    options: import("express-serve-static-core").IRouterMatcher<express.Express, "options">;
-    head: import("express-serve-static-core").IRouterMatcher<express.Express, "head">;
-    checkout: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    connect: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    copy: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    lock: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    merge: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    mkactivity: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    mkcol: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    move: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    "m-search": import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    notify: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    propfind: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    proppatch: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    purge: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    report: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    search: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    subscribe: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    trace: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    unlock: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    unsubscribe: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    link: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    unlink: import("express-serve-static-core").IRouterMatcher<express.Express, any>;
-    route<T extends string>(prefix: T): import("express-serve-static-core").IRoute<T>;
-    route(prefix: import("express-serve-static-core").PathParams): import("express-serve-static-core").IRoute<string>;
-    stack: import("express-serve-static-core").ILayer[];
-};
+declare global {
+    namespace Express {
+        interface Application {
+            ws: WebSocketServer;
+        }
+    }
+}
+export declare function app(port: number): express.Express;
 //# sourceMappingURL=index.d.ts.map

@@ -7,7 +7,7 @@ exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const ws_1 = require("ws");
 const apps = [];
-class server {
+class Server {
     app;
     ws;
     constructor(port) {
@@ -16,10 +16,10 @@ class server {
         const ws = app?.ws ?? new ws_1.WebSocketServer({ noServer: true });
         this.app = instance;
         this.ws = ws;
-        if (!apps.find(s => s.port == port)) {
+        if (!app) {
             instance.listen(port).on('upgrade', (req, socket, head) => {
                 this.ws.handleUpgrade(req, socket, head, (ws) => {
-                    ws.emit('connection', ws, req);
+                    this.ws.emit('connection', ws, req);
                 });
             });
             apps.push({ port, instance, ws });
@@ -30,7 +30,8 @@ class server {
 }
 ;
 function app(port) {
-    const instance = new server(port);
-    return { ...instance.app, ws: instance.ws };
+    const instance = new Server(port);
+    instance.app.ws = instance.ws;
+    return instance.app;
 }
 exports.app = app;
