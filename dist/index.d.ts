@@ -1,11 +1,5 @@
-import express from 'express';
-import { WebSocketServer } from 'ws';
-declare global {
-    namespace Express {
-        interface Application {
-            ws: WebSocketServer;
-        }
-    }
-}
-export declare function app(port: number): express.Express;
+import { FastifyInstance } from "fastify";
+export declare function app(port: number): FastifyInstance & {
+    safeRegister: (plugin: any, options?: any) => void;
+};
 //# sourceMappingURL=index.d.ts.map

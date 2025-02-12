@@ -1,46 +1,48 @@
-import express, { Express } from 'express';
-import { WebSocketServer } from 'ws';
+import Fastify, { FastifyInstance } from "fastify";
 
-declare global {
-    namespace Express {
-        interface Application {
-            ws: WebSocketServer;
+type AppInstance = {
+    port: number;
+    instance: FastifyInstance & { safeRegister?: (plugin: any, options?: any) => void };
+    plugins: Set<string>;
+};
+
+
+const apps: AppInstance[] = [];
+const registeredPlugins = new Set()
+class Server {
+    public app: FastifyInstance & { safeRegister: (plugin: any, options?: any) => void };
+
+    public constructor(port: number) {
+        const existingApp = apps.find((s) => s.port === port);
+        const instance: FastifyInstance = existingApp?.instance ?? Fastify();
+
+        //@ts-ignore
+        this.app = instance;
+        this.app.safeRegister = this.safeRegister.bind(this);
+        
+        if (!existingApp) {
+            instance.listen({ port, host: "0.0.0.0" }, (err, address) => {
+                if (err) {
+                    console.error("Server failed to start:", err);
+                    process.exit(1);
+                }
+            });
+
+            apps.push({ port, instance, plugins: new Set() });
         }
+    }
+
+    private safeRegister(plugin: any, options = {}) {
+        const pluginName = plugin.name || null;
+        console.log(pluginName)
+        console.log(registeredPlugins)
+        if(!pluginName || registeredPlugins.has(pluginName)) return;
+        this.app.register(plugin, options);
+        if(pluginName) registeredPlugins.add(pluginName);
     }
 }
 
-type apps = {
-    port: number;
-    instance: Express;
-    ws: WebSocketServer;
-};
-
-const apps: apps[] = [];
-
-class Server {
-    public app: Express;
-    public ws: WebSocketServer;
-    
-    public constructor(port: number){
-        const app = apps.find(s => s.port == port)
-        const instance = app?.instance ?? express();
-        const ws = app?.ws ?? new WebSocketServer({noServer: true})
-        this.app = instance;
-        this.ws = ws
-        
-        if(!app){
-            instance.listen(port).on('upgrade', (req, socket, head) => {
-                this.ws.handleUpgrade(req, socket, head, (ws) => {
-                    this.ws.emit('connection', ws, req);
-                });
-            });
-            apps.push({port, instance, ws});
-        };
-    };
-};
-
-export function app(port: number){
-    const instance = new Server(port)
-    instance.app.ws = instance.ws
-    return instance.app
+export function app(port: number): FastifyInstance & { safeRegister: (plugin: any, options?: any) => void } {
+    const instance = new Server(port);
+    return instance.app;
 }

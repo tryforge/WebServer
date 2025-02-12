@@ -3,35 +3,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
-const express_1 = __importDefault(require("express"));
-const ws_1 = require("ws");
+exports.app = app;
+const fastify_1 = __importDefault(require("fastify"));
 const apps = [];
+const registeredPlugins = new Set();
 class Server {
     app;
-    ws;
     constructor(port) {
-        const app = apps.find(s => s.port == port);
-        const instance = app?.instance ?? (0, express_1.default)();
-        const ws = app?.ws ?? new ws_1.WebSocketServer({ noServer: true });
+        const existingApp = apps.find((s) => s.port === port);
+        const instance = existingApp?.instance ?? (0, fastify_1.default)();
+        //@ts-ignore
         this.app = instance;
-        this.ws = ws;
-        if (!app) {
-            instance.listen(port).on('upgrade', (req, socket, head) => {
-                this.ws.handleUpgrade(req, socket, head, (ws) => {
-                    this.ws.emit('connection', ws, req);
-                });
+        this.app.safeRegister = this.safeRegister.bind(this);
+        if (!existingApp) {
+            instance.listen({ port, host: "0.0.0.0" }, (err, address) => {
+                if (err) {
+                    console.error("Server failed to start:", err);
+                    process.exit(1);
+                }
             });
-            apps.push({ port, instance, ws });
+            apps.push({ port, instance, plugins: new Set() });
         }
-        ;
     }
-    ;
+    safeRegister(plugin, options = {}) {
+        const pluginName = plugin.name || null;
+        console.log(pluginName);
+        console.log(registeredPlugins);
+        if (!pluginName || registeredPlugins.has(pluginName))
+            return;
+        this.app.register(plugin, options);
+        if (pluginName)
+            registeredPlugins.add(pluginName);
+    }
 }
-;
 function app(port) {
     const instance = new Server(port);
-    instance.app.ws = instance.ws;
     return instance.app;
 }
-exports.app = app;
