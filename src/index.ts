@@ -34,8 +34,6 @@ class Server {
 
     private safeRegister(plugin: any, options = {}) {
         const pluginName = plugin.name || null;
-        console.log(pluginName)
-        console.log(registeredPlugins)
         if(!pluginName || registeredPlugins.has(pluginName)) return;
         this.app.register(plugin, options);
         if(pluginName) registeredPlugins.add(pluginName);
