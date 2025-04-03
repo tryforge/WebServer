@@ -5,7 +5,7 @@ This package helps all the developers that want to make an extensions using fast
 Using this package is really simple, here is everything you need to know:
 1. Install this extension
 ```bash
-npm i @tyrforge/webserver
+npm i @tryforge/webserver
 ```
 2. Create your first route
 ```js
